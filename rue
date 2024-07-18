@@ -31,7 +31,7 @@ fi
 
 rustc $absolute_path || handle_error
 
-cleaned_path="${absolute_path%.rs}"
+cleaned_path=$(basename "${input_file%.rs}")
 
-$cleaned_path
+./$cleaned_path
 rm $cleaned_path
