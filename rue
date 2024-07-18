@@ -1,8 +1,37 @@
 #!/bin/bash
 
 # .rsファイルをコンパイルして実行した後、バイナリを削除する
-arg1=$1
-rsfile="$1.rs"
-rustc $rsfile
-./$arg1
-rm $arg1
+
+# 関数を使ってエラー処理
+handle_error() {
+    local exit_code=$?
+    echo "Error: $1" >&2
+    exit $exit_code
+}
+
+# 引数の個数が1つであるか確認
+if [ "$#" -ne 1 ]; then
+    handle_error "Takes only one argument. Specify the file name."
+fi
+
+input_file=$1
+
+# ファイルの拡張子が.rsであるか確認
+regex='\.rs$'
+if [[ ! $(basename "$input_file") =~ $regex ]]; then
+    handle_error "Invalid file extension: $(basename "$input_file") Expected .rs file"
+fi
+
+absolute_path=$(realpath "$input_file")
+
+# ファイルの存在をチェック
+if [ ! -f "$absolute_path" ]; then
+    handle_error "File not found: $absolute_path"
+fi
+
+rustc $absolute_path || handle_error
+
+cleaned_path="${absolute_path%.rs}"
+
+$cleaned_path
+rm $cleaned_path
