@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# .rsファイルをコンパイルして実行した後、バイナリを削除する
+arg1=$1
+rsfile="$1.rs"
+rustc $rsfile
+./$arg1
+rm $arg1
