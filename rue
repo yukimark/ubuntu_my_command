@@ -1,13 +1,7 @@
 #!/bin/bash
+source $(dirname "$0")/common/common.sh
 
 # .rsファイルをコンパイルして実行した後、バイナリを削除する
-
-# 関数を使ってエラー処理
-handle_error() {
-    local exit_code=$?
-    echo "Error: $1" >&2
-    exit $exit_code
-}
 
 # 引数の個数が1つであるか確認
 if [ "$#" -ne 1 ]; then
@@ -29,7 +23,7 @@ if [ ! -f "$absolute_path" ]; then
     handle_error "File not found: $absolute_path"
 fi
 
-rustc $absolute_path || handle_error
+rustc $absolute_path || handle_error "compile error"
 
 cleaned_path=$(basename "${input_file%.rs}")
 
