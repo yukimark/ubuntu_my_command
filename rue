@@ -3,6 +3,11 @@ source $(dirname "$0")/common/common.sh
 
 # .rsファイルをコンパイルして実行した後、バイナリを削除する
 
+# rustc がインストールされているか確認
+if ! command -v rustc &> /dev/null; then
+  handle_error "rustc could not be found. Please install Rust before running this script."
+fi
+
 # 引数の個数が1つであるか確認
 if [ "$#" -ne 1 ]; then
     handle_error "Takes only one argument. Specify the file name."
